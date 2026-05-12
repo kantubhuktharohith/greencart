@@ -19,16 +19,25 @@ await connectDB()
 await connectCloudinary()
 
 // allow multiple origins
-const allowedOrigins = [process.env.FRONTEND_URL || 'http://localhost:5173', 'https://greencart-4y4c.vercel.app']
+const allowedOrigins = [
+    process.env.FRONTEND_URL || 'http://localhost:5173',
+    'https://greencart-4y4c.vercel.app'
+]
 
-app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhook)
+const corsOptions = { origin: allowedOrigins, credentials: true }
 
-// middleware configuration
-app.use(express.json());
+// ✅ CORS must come FIRST — before all routes
+app.use(cors(corsOptions));
+
+// ✅ Handle browser preflight OPTIONS requests
+app.options('*', cors(corsOptions));
+
 app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(express.json());
 app.set('trust proxy', 1);
 
+// Stripe webhook (needs raw body, placed after cors but before express.json globally)
+app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhook)
 
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter)

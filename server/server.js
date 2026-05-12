@@ -29,8 +29,8 @@ const corsOptions = { origin: allowedOrigins, credentials: true }
 // ✅ CORS must come FIRST — before all routes
 app.use(cors(corsOptions));
 
-// ✅ Handle browser preflight OPTIONS requests
-app.options('*', cors(corsOptions));
+// ✅ Handle browser preflight OPTIONS requests (Express 5 requires '(.*)' not '*')
+app.options('(.*)', cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());

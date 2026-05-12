@@ -16,6 +16,7 @@ const Login = () => {
             const {data} = await axios.post(`/api/user/${state}`, {name, email, password});
             if(data.success){
                 // Fetch the full user data from backend after login
+                localStorage.setItem('token', data.token);
                 await fetchUser();
                 setShowUserLogin(false)
                 toast.success(state === 'login' ? 'Logged in successfully' : 'Account created successfully')

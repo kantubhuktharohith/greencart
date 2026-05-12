@@ -7,6 +7,20 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
+axios.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    const sellerToken = localStorage.getItem('sellerToken');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (sellerToken) {
+        config.headers.sellerToken = sellerToken;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 export const AppContext = createContext();
 
 export const AppContextProvider = ({children})=>{

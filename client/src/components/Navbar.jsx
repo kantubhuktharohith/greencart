@@ -9,6 +9,7 @@ const Navbar = () => {
     const logout = async ()=>{
         try {
             await axios.get('/api/user/logout');
+            localStorage.removeItem('token');
             setUser(null);
             setCartItems({});
             navigate('/')

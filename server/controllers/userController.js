@@ -28,7 +28,7 @@ export const register = async (req,res)=>{
                 sameSite: 'none', 
                 maxAge: 7 * 24 * 60 * 60 * 1000, 
                 })
-                return res.json({success: true, user: {_id: user._id, email: user.email, name: user.name, cartItems: user.cartItems}})
+                return res.json({success: true, token, user: {_id: user._id, email: user.email, name: user.name, cartItems: user.cartItems}})
     } catch (error) {
         console.log(error.message);
         res.json({success: false, message: error.message });
@@ -61,7 +61,7 @@ export const login = async (req, res)=>{
                 sameSite: 'none', 
                 maxAge: 7 * 24 * 60 * 60 * 1000, 
                 })
-                return res.json({success: true, user: {_id: user._id, email: user.email, name: user.name, cartItems: user.cartItems}})
+                return res.json({success: true, token, user: {_id: user._id, email: user.email, name: user.name, cartItems: user.cartItems}})
 
     } catch (error){
         console.log(error.message);

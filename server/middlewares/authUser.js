@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
 
 const authUser = async (req, res, next)=>{
-    const {token} = req.cookies;
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1] || req.headers.token;
     console.log('Auth middleware - token present:', !!token);
 
     if(!token) {
-        console.log('No token found in cookies');
+        console.log('No token found in cookies or headers');
         return res.json({ success: false, message: 'Not Authorized' });
     }
 

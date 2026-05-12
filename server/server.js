@@ -27,10 +27,8 @@ const allowedOrigins = [
 const corsOptions = { origin: allowedOrigins, credentials: true }
 
 // ✅ CORS must come FIRST — before all routes
+// cors() middleware automatically handles OPTIONS preflight requests
 app.use(cors(corsOptions));
-
-// ✅ Handle browser preflight OPTIONS requests (Express 5 requires '(.*)' not '*')
-app.options('(.*)', cors(corsOptions));
 
 app.use(cookieParser());
 app.use(express.json());

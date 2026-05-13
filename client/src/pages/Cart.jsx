@@ -10,13 +10,15 @@ const Cart = () => {
     const [showAddress, setShowAddress] = useState(false)
     const [selectedAddress, setSelectedAddress] = useState(null)
     const [paymentOption, setPaymentOption] = useState("COD")
+    const [isPlacingOrder, setIsPlacingOrder] = useState(false)
 
     const getCart = () => {
         let tempArray = []
         for (const key in cartItems) {
             const product = products.find((item) => item._id === key)
-            product.quantity = cartItems[key]
-            tempArray.push(product)
+            if (product) {
+                tempArray.push({ ...product, quantity: cartItems[key] })
+            }
         }
         setCartArray(tempArray)
     }
@@ -36,8 +38,11 @@ const Cart = () => {
     }
 
     const placeOrder = async () => {
+        if (isPlacingOrder) return;
+        setIsPlacingOrder(true);
         try {
             if (!selectedAddress) {
+                setIsPlacingOrder(false);
                 return toast.error("Please select an address")
             }
 
@@ -72,6 +77,8 @@ const Cart = () => {
             }
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            setIsPlacingOrder(false);
         }
     }
 
@@ -188,8 +195,8 @@ const Cart = () => {
                     </p>
                 </div>
 
-                <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
-                    {paymentOption === "COD" ? "Place Order" : "Proceed to Checkout"}
+                <button onClick={placeOrder} disabled={isPlacingOrder} className={`w-full py-3 mt-6 cursor-pointer text-white font-medium transition ${isPlacingOrder ? 'bg-gray-400' : 'bg-primary hover:bg-primary-dull'}`}>
+                    {isPlacingOrder ? "Placing Order..." : (paymentOption === "COD" ? "Place Order" : "Proceed to Checkout")}
                 </button>
             </div>
         </div>

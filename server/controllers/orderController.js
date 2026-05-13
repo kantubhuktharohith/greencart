@@ -27,6 +27,9 @@ export const placeOrderCOD = async (req, res)=>{
             paymentType: "COD",
         });
 
+        // Clear user cart
+        await User.findByIdAndUpdate(userId, {cartItems: {}});
+
         return res.json({success: true, message: "Order Placed Successfully" })
     } catch (error) {
         return res.json({success: false, message: error.message});
@@ -139,7 +142,7 @@ export const stripeWebhook = async (req, res)=>{
             //Mark Payment as Paid
             await Order.findByIdAndUpdate(orderId, {isPaid: true})
             //Clear User Cart
-            await User.findByIdAndUpdate(userId, {cartItems: []});
+            await User.findByIdAndUpdate(userId, {cartItems: {}});
             break;
         }
         case "payment_intent.payment_failed": {
@@ -182,7 +185,7 @@ export const getUserOrders = async (req, res)=>{
 export const getAllOrders = async (req, res)=>{
     try {
         const orders = await Order.find({})
-            .populate("items.product address").sort({createdAt: -1});
+            .populate("items.product address userId").sort({createdAt: -1});
         res.json({ success: true, orders });
     } catch (error) {
         res.json({ success: true, message: error.message });

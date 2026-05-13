@@ -74,11 +74,11 @@ export const placeOrderStripe = async (req, res)=>{
         const line_items = productData.map((item)=>{
             return {
                 price_data: {
-                    currency: 'usd',
+                    currency: 'inr',
                     product_data: {
                         name: item.name,
                     },
-                    unit_amount: Math.floor(item.price + item.price * 0.02) * 100, // Convert to cents and add tax
+                    unit_amount: Math.floor(item.price + item.price * 0.02) * 100, // Convert to paise and add tax
 
                 },
                 quantity: item.quantity,

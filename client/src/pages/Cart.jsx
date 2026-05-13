@@ -28,8 +28,7 @@ const Cart = () => {
                 setAddresses(data.addresses)
                 if (data.addresses.length > 0) {
                     setSelectedAddress(data.addresses[0])
-                } 
-                toast.error(data.message)
+                }
             }
         } catch (error) {
             toast.error(error.message)
@@ -107,7 +106,7 @@ const Cart = () => {
                     <div key={index} className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 items-center text-sm md:text-base font-medium pt-3">
                         <div className="flex items-center md:gap-6 gap-3">
                             <div onClick={() => {
-                                navigate(`/products/${product.category.toLowerCase()}/${product._id}`); scrollTo(0, 0)
+                                navigate(`/product/${product.category.toLowerCase()}/${product._id}`); scrollTo(0, 0)
                             }} className="cursor-pointer w-24 h-24 flex items-center justify-center border border-gray-300 rounded">
                                 <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
                             </div>

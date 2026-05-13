@@ -112,3 +112,29 @@ export const logout = async (req, res)=>{
         res.json({success: false, message: error.message });
     }
 }
+
+// Update User Profile : /api/user/profile
+export const updateProfile = async (req, res) => {
+    try {
+        const { userId, name, phone, location } = req.body;
+
+        if (!name || name.trim() === '') {
+            return res.json({ success: false, message: "Name is required" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { name: name.trim(), phone: phone || '', location: location || '' },
+            { new: true }
+        ).select("-password");
+
+        if (!updatedUser) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        return res.json({ success: true, message: "Profile updated successfully", user: updatedUser });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
+    }
+}

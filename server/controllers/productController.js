@@ -1,5 +1,7 @@
 import { v2 as cloudinary } from "cloudinary"
 import Product from "../models/Product.js"
+import Order from "../models/Order.js"
+import User from "../models/User.js"
 
 // add product : /api/product/add
 export const addProduct = async (req, res)=>{
@@ -57,5 +59,56 @@ export const changeStock = async (req, res)=>{
     } catch (error) {
         console.log(error.message);
         res.json({ success: false, message: error.message })
+    }
+}
+
+// add review to product : /api/product/review
+export const addReview = async (req, res)=>{
+    try {
+        const { productId, rating, comment, userId } = req.body;
+
+        if (!productId || !rating || !comment) {
+            return res.json({ success: false, message: "Please provide all review details." });
+        }
+
+        // Check if user has purchased the product
+        const hasPurchased = await Order.findOne({ 
+            userId, 
+            "items.product": productId 
+        });
+
+        if (!hasPurchased) {
+            return res.json({ success: false, message: "You can only review products you have purchased." });
+        }
+
+        const user = await User.findById(userId);
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.json({ success: false, message: "Product not found." });
+        }
+
+        const newReview = {
+            userId,
+            name: user.name,
+            rating: Number(rating),
+            comment,
+        };
+
+        const existingReviewIndex = product.reviews.findIndex(r => r.userId.toString() === userId.toString());
+
+        if (existingReviewIndex !== -1) {
+            // Update existing review
+            product.reviews[existingReviewIndex] = newReview;
+        } else {
+            // Add new review
+            product.reviews.push(newReview);
+        }
+
+        await product.save();
+        res.json({ success: true, message: "Review added successfully." });
+    } catch (error) {
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
     }
 }

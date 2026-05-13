@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../../context/AppContext'
-import { assets, dummyOrders } from '../../assets/assets'
+import { assets } from '../../assets/assets'
+import toast from 'react-hot-toast'
 
 const Orders = () => {
     const {currency, axios} = useAppContext()
@@ -18,6 +19,20 @@ const Orders = () => {
             toast.error(error.message)
         }
     };
+
+    const statusHandler = async (e, orderId) => {
+        try {
+            const { data } = await axios.post('/api/order/status', { orderId, status: e.target.value })
+            if (data.success) {
+                toast.success(data.message)
+                fetchOrders()
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
 
     useEffect(()=>{
         fetchOrders();
@@ -56,6 +71,16 @@ const Orders = () => {
                         <p>Method: {order.paymentType}</p>
                         <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                         <p>Payment: {order.isPaid ? "Paid" : "Pending"}</p>
+                        {order.status === "Cancelled" ? (
+                            <p className="font-medium text-red-500 mt-2">Cancelled</p>
+                        ) : (
+                            <select onChange={(e) => statusHandler(e, order._id)} value={order.status} className="border border-gray-300 p-1 rounded mt-1 bg-white cursor-pointer outline-primary text-gray-700">
+                                <option value="Order Placed">Order Placed</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Out for Delivery">Out for Delivery</option>
+                                <option value="Delivered">Delivered</option>
+                            </select>
+                        )}
                     </div>
                 </div>
             ))}

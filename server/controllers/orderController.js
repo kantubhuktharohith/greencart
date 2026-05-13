@@ -59,6 +59,11 @@ export const placeOrderStripe = async (req, res)=>{
         //Add Tax Charge (2%)
         amount += Math.floor(amount * 0.02);
 
+        // Check Stripe minimum amount (INR requires at least ₹40)
+        if (amount < 40) {
+            return res.json({ success: false, message: "Stripe requires a minimum order amount of ₹40. Please add more items to your cart." });
+        }
+
         const order =await Order.create({
             userId,
             items,
@@ -109,13 +114,13 @@ export const stripeWebhook = async (req, res)=>{
     // Stripe Gateway Initialize 
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
-    const sig = request.headers['stripe-signature'];
+    const sig = req.headers['stripe-signature'];
     let event;
 
     try {
-        event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        event = stripeInstance.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
-        return res.status(400).send(`Webhook Error: ${error.message}`)
+        return res.status(400).send(`Webhook Error: ${err.message}`)
     }
 
     // Handle the event
@@ -137,7 +142,7 @@ export const stripeWebhook = async (req, res)=>{
             await User.findByIdAndUpdate(userId, {cartItems: []});
             break;
         }
-            case "payment_intent.succeeded": {
+        case "payment_intent.payment_failed": {
                 const paymentIntent = event.data.object;
             const paymentIntentId = paymentIntent.id;
 
@@ -156,7 +161,7 @@ export const stripeWebhook = async (req, res)=>{
                 console.error(`Unhandled event type ${event.type}`)
                 break;
     }
-    response.json({received: true});
+    res.json({received: true});
 }
 
 // get orders by user ID : /api/order/user
@@ -164,10 +169,8 @@ export const stripeWebhook = async (req, res)=>{
 export const getUserOrders = async (req, res)=>{
     try {
         const { userId } = req.body;
-        const orders = await Order.find({
-            userId,
-            $or: [{paymentType: "COD"},  {isPaid: true}]
-        }).populate("items.product address").sort({createdAt: -1});
+        const orders = await Order.find({ userId })
+            .populate("items.product address").sort({createdAt: -1});
         res.json({ success: true, orders });
     } catch (error) {
         res.json({ success: true, message: error.message });
@@ -178,11 +181,44 @@ export const getUserOrders = async (req, res)=>{
 
 export const getAllOrders = async (req, res)=>{
     try {
-        const orders = await Order.find({
-            $or: [{paymentType: "COD"},  {isPaid: true}]
-        }).populate("items.product address").sort({createdAt: -1});
+        const orders = await Order.find({})
+            .populate("items.product address").sort({createdAt: -1});
         res.json({ success: true, orders });
     } catch (error) {
         res.json({ success: true, message: error.message });
+    }
+}
+
+// update order status (Seller/Admin) : /api/order/status
+export const updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, status } = req.body;
+        await Order.findByIdAndUpdate(orderId, { status });
+        res.json({ success: true, message: "Order status updated" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+}
+
+// cancel order (User) : /api/order/cancel
+export const cancelOrder = async (req, res) => {
+    try {
+        const { orderId, userId } = req.body;
+        const order = await Order.findOne({ _id: orderId, userId });
+        
+        if (!order) {
+            return res.json({ success: false, message: "Order not found" });
+        }
+        
+        if (order.status !== 'Order Placed') {
+            return res.json({ success: false, message: "Cannot cancel order at this stage." });
+        }
+        
+        order.status = "Cancelled";
+        await order.save();
+        
+        res.json({ success: true, message: "Order cancelled successfully" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
     }
 }

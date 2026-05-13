@@ -31,11 +31,12 @@ const corsOptions = { origin: allowedOrigins, credentials: true }
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
-app.use(express.json());
 app.set('trust proxy', 1);
 
 // Stripe webhook (needs raw body, placed after cors but before express.json globally)
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhook)
+
+app.use(express.json());
 
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter)

@@ -1,6 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../context/AppContext'
-import { dummyOrders } from '../assets/assets'
+import toast from 'react-hot-toast'
+
+const trackingSteps = ['Order Placed', 'Shipped', 'Out for Delivery', 'Delivered'];
+
+const OrderTracker = ({ status }) => {
+    const currentStep = trackingSteps.indexOf(status);
+
+    return (
+        <div className="w-full mt-6 px-2">
+            <div className="flex items-center justify-between relative">
+                {/* Background line */}
+                <div className="absolute top-[14px] left-[5%] right-[5%] h-[3px] bg-gray-200 z-0"></div>
+                {/* Active line */}
+                <div
+                    className="absolute top-[14px] left-[5%] h-[3px] bg-primary z-0 transition-all duration-500"
+                    style={{ width: `${Math.max(0, currentStep) * (90 / (trackingSteps.length - 1))}%` }}
+                ></div>
+
+                {trackingSteps.map((step, index) => (
+                    <div key={step} className="flex flex-col items-center z-10 flex-1">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all duration-300 ${
+                            index <= currentStep
+                                ? 'bg-primary border-primary text-white'
+                                : 'bg-white border-gray-300 text-gray-400'
+                        }`}>
+                            {index <= currentStep ? '✓' : index + 1}
+                        </div>
+                        <p className={`text-[11px] mt-2 text-center leading-tight ${
+                            index <= currentStep ? 'text-primary font-semibold' : 'text-gray-400'
+                        }`}>
+                            {step}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const MyOrders = () => {
     const [myOrders, setMyOrders] = useState([])
@@ -17,13 +54,29 @@ const MyOrders = () => {
         }
     }
 
+    const cancelOrderHandler = async (order) => {
+        try {
+            const { data } = await axios.post('/api/order/cancel', { orderId: order._id })
+            if (data.success) {
+                if (order.paymentType === 'Online') {
+                    toast.success("Order cancelled successfully. Your refund will be processed within 7 days.")
+                } else {
+                    toast.success(data.message)
+                }
+                fetchMyOrders()
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
     useEffect(()=>{
         if(user){
             fetchMyOrders()
         }
     },[user])
-
-
 
     return (
     <div className='mt-16 pb-16'>
@@ -51,17 +104,38 @@ const MyOrders = () => {
                         </div>
                         <div className='flex flex-col justify-center md:ml-30 mb-5 md:mb-4'>
                             <p>Quantity: {item.quantity || "1"}</p>
-                            <p>Status: {order.status}</p>
-                            <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+                            <p>Date: {new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                            <p>Time: {new Date(order.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
                         </div>
                         <div  className='flex flex-col justify-center md:ml-30 mb-5 md:mb-4'>
                             <p className='text-primary text-lg font-medium'>
                             Amount: {currency}{item.product.offerPrice * item.quantity}
                         </p></div>
-                        
-                            
                     </div>
                 ))}
+
+                {/* Order Tracking */}
+                {order.status === 'Cancelled' ? (
+                    <div className='flex items-center gap-3 mt-4 px-4 py-3 bg-red-50 rounded-lg border border-red-200'>
+                        <span className='text-red-500 text-lg'>✕</span>
+                        <div>
+                            <p className='text-red-600 font-semibold'>Order Cancelled</p>
+                            {order.paymentType === 'Online' && (
+                                <p className='text-red-400 text-sm'>Your refund will be processed within 7 days.</p>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <OrderTracker status={order.status} />
+                )}
+                
+                <div className='flex justify-end mt-4 px-4'>
+                    {order.status === 'Order Placed' && (
+                        <button onClick={() => cancelOrderHandler(order)} className='px-6 py-2 border border-red-500 text-red-500 rounded font-medium hover:bg-red-50 transition cursor-pointer'>
+                            Cancel Order
+                        </button>
+                    )}
+                </div>
             </div>
         ))}
     </div>

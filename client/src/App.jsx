@@ -12,6 +12,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import AddAddress from './pages/AddAddress';
 import MyOrders from './pages/MyOrders';
+import Profile from './pages/Profile';
 import SellerLogin from './components/seller/SellerLogin';
 import SellerLayout from './pages/seller/SellerLayout';
 import AddProduct from './pages/seller/AddProduct';
@@ -38,11 +39,12 @@ const {showUserLogin, isSeller} = useAppContext()
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/product' element={<AllProducts/>} />
-        <Route path='/products/:category' element={<ProductCategory/>} />
-        <Route path='/products/:category/:id' element={<ProductDetails/>} />
+        <Route path='/product/:category' element={<ProductCategory/>} />
+        <Route path='/product/:category/:id' element={<ProductDetails/>} />
         <Route path='/cart' element={<Cart/>} />
         <Route path='/add-address' element={<AddAddress/>} />
         <Route path='/my-orders' element={<MyOrders/>} />
+        <Route path='/profile' element={<Profile/>} />
         <Route path='/loader' element={<Loading/>} />
         <Route path='/seller' element={isSeller ? <SellerLayout/> : <SellerLogin/>}>
           <Route index element={isSeller ? <AddProduct/> :null} />                       

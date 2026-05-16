@@ -1,4 +1,3 @@
-
 # GreenCart (Minicart) 🛒
 
 A full-stack e-commerce web application built with the MERN stack (MongoDB, Express, React, Node.js). GreenCart provides a seamless shopping experience with a visually appealing interface, secure authentication, product management, and an integrated seller dashboard.

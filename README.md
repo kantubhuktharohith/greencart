@@ -74,7 +74,6 @@ CLOUDINARY_API_SECRET=your_api_secret
 # Stripe Setup
 STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
-
 Create a `.env` file in the `client` directory for the frontend URL:
 ```env
 VITE_API_URL=http://localhost:5000

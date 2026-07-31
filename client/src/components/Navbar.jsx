@@ -32,10 +32,9 @@ const Navbar = () => {
     // Close profile menu on outside click/tap
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (profileRef.current && !profileRef.current.contains(e.target)) {
-                setShowProfileMenu(false)
-            }
-            if (mobileProfileRef.current && !mobileProfileRef.current.contains(e.target)) {
+            const isInsideDesktop = profileRef.current && profileRef.current.contains(e.target)
+            const isInsideMobile = mobileProfileRef.current && mobileProfileRef.current.contains(e.target)
+            if (!isInsideDesktop && !isInsideMobile) {
                 setShowProfileMenu(false)
             }
         }

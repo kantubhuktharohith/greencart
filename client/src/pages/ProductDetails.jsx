@@ -58,24 +58,24 @@ const ProductDetails = () => {
 
     return product && (
         <div className="mt-12">
-            <p>
+            <p className="text-sm flex flex-wrap gap-1">
                 <Link to={"/"}>Home</Link> /
                 <Link to={"/product"}> Products</Link> /
                 <Link to={`product/${product.category.toLowerCase()}`}> {product.category}</Link> /
                 <span className="text-primary"> {product.name}</span>
             </p>
 
-            <div className="flex flex-col md:flex-row gap-16 mt-4">
-                <div className="flex gap-3">
-                    <div className="flex flex-col gap-3">
+            <div className="flex flex-col md:flex-row gap-8 md:gap-16 mt-4">
+                <div className="flex flex-col-reverse md:flex-row gap-3">
+                    <div className="flex md:flex-col gap-3 overflow-x-auto no-scrollbar">
                         {product.image.map((image, index) => (
-                            <div key={index} onClick={() => setThumbnail(image)} className="border max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer" >
+                            <div key={index} onClick={() => setThumbnail(image)} className="border min-w-20 max-w-24 border-gray-500/30 rounded overflow-hidden cursor-pointer" >
                                 <img src={image} alt={`Thumbnail ${index + 1}`} />
                             </div>
                         ))}
                     </div>
 
-                    <div className="border border-gray-500/30 max-w-100 rounded overflow-hidden">
+                    <div className="border border-gray-500/30 max-w-full md:max-w-100 rounded overflow-hidden">
                         <img src={thumbnail} alt="Selected product" className="w-full h-full object-cover" />
                     </div>
                 </div>
@@ -103,7 +103,7 @@ const ProductDetails = () => {
                         ))}
                     </ul>
 
-                    <div className="flex items-center mt-10 gap-4 text-base">
+                    <div className="flex flex-col sm:flex-row items-center mt-10 gap-3 sm:gap-4 text-base">
                         <button onClick={()=> addToCart(product._id)} className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
                             Add to Cart
                         </button>
@@ -127,7 +127,7 @@ const ProductDetails = () => {
                                     key={i} 
                                     src={i < rating ? assets.star_icon : assets.star_dull_icon} 
                                     alt="star" 
-                                    className="w-6 cursor-pointer"
+                                    className="w-8 cursor-pointer p-1"
                                     onClick={() => setRating(i + 1)}
                                 />
                             ))}

@@ -97,13 +97,13 @@ const Cart = () => {
 
 
     return products.length > 0 && cartItems ? (
-        <div className="flex flex-col md:flex-row mt-16">
+        <div className="flex flex-col md:flex-row mt-16 gap-6 md:gap-0">
             <div className='flex-1 max-w-4xl'>
                 <h1 className="text-3xl font-medium mb-6">
                     Shopping Cart <span className="text-sm text-primary">{getCartCount()} Items</span>
                 </h1>
 
-                <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-base font-medium pb-3">
+                <div className="grid grid-cols-[2fr_1fr_1fr] text-gray-500 text-sm md:text-base font-medium pb-3">
                     <p className="text-left">Product Details</p>
                     <p className="text-center">Subtotal</p>
                     <p className="text-center">Action</p>
@@ -118,7 +118,7 @@ const Cart = () => {
                                 <img className="max-w-full h-full object-cover" src={product.image[0]} alt={product.name} />
                             </div>
                             <div>
-                                <p className="hidden md:block font-semibold">{product.name}</p>
+                                <p className="font-semibold text-sm md:text-base line-clamp-2">{product.name}</p>
                                 <div className="font-normal text-gray-500/70">
                                     <p>Weight: <span>{product.weight || "N/A"}</span></p>
                                     <div className='flex items-center'>
@@ -146,7 +146,7 @@ const Cart = () => {
 
             </div>
 
-            <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
+            <div className="md:max-w-[360px] w-full bg-gray-100/40 p-5 border border-gray-300/70 rounded-md">
                 <h2 className="text-xl md:text-xl font-medium">Order Summary</h2>
                 <hr className="border-gray-300 my-5" />
 

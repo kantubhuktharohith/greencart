@@ -50,8 +50,9 @@ const SellerLayout = () => {
                                 : "hover:bg-gray-100/90 border-white"
                             }`
                         }
+                        title={item.name}
                     >
-                        <img src={item.icon} alt="" className="w-7 h-7" />
+                        <img src={item.icon} alt={item.name} className="w-7 h-7" />
                         <p className="md:block hidden text-center">{item.name}</p>
                     </NavLink>
                 ))}

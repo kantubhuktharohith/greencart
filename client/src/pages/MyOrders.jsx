@@ -27,7 +27,7 @@ const OrderTracker = ({ status }) => {
                         }`}>
                             {index <= currentStep ? '✓' : index + 1}
                         </div>
-                        <p className={`text-[11px] mt-2 text-center leading-tight ${
+                        <p className={`text-[10px] sm:text-[11px] mt-2 text-center leading-tight ${
                             index <= currentStep ? 'text-primary font-semibold' : 'text-gray-400'
                         }`}>
                             {step}
@@ -86,7 +86,7 @@ const MyOrders = () => {
         </div>
         {myOrders.map((order, index)=>(
             <div key={index} className='border border-gray-300 rounded-lg mb-10 p-4 py-5 max-w-4xl'>
-                <p className='flex justify-between md:items-center text-gray-400 md:font-medium max-md:flex-col'>
+                <p className='flex justify-between md:items-center text-gray-400 md:font-medium max-md:flex-col max-md:gap-1 text-sm'>
                     <span>OrderId : {order._id}</span>
                     <span>Name : {user?.name}</span>
                     <span>Payment : {order.paymentType}</span>

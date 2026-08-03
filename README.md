@@ -1,104 +1,276 @@
-# GreenCart (Minicart) 🛒
+# 🛒 GreenCart (MiniCart)
 
-A full-stack e-commerce web application built with the MERN stack (MongoDB, Express, React, Node.js). GreenCart provides a seamless shopping experience with a visually appealing interface, secure authentication, product management, and an integrated seller dashboard.
+A modern full-stack e-commerce web application built using the **MERN Stack (MongoDB, Express.js, React, Node.js)**. GreenCart delivers a fast, secure, and responsive online shopping experience with customer and seller portals, secure payments, order management, and an intuitive user interface.
 
-## 🌟 Key Features
+---
 
-- **User Authentication**: Secure JWT-based authentication with local storage persistence, ensuring cross-device support (including mobile).
-- **Product & Cart Management**: Browse products, add items to the cart, and manage quantities.
-- **Order Tracking**: Visual Amazon-style order tracking stepper in the user dashboard.
-- **User Profiles**: Manage personal information, phone numbers, and delivery locations.
-- **Seller Dashboard**: Dedicated portal for sellers to log in, manage inventory, and track customer orders.
-- **Secure Payments**: Integrated with Stripe for seamless checkout.
-- **Image Uploads**: Cloudinary integration for handling product images via Multer.
-- **Responsive Design**: Built with Tailwind CSS to ensure a great experience on both desktop and mobile devices.
+## 🚀 Features
 
-## 🛠️ Tech Stack
+### 👤 User Features
 
-### Frontend
-- **React 19** (with Vite)
-- **Tailwind CSS 4**
-- **React Router v7**
-- **Axios** (API requests)
-- **React Hot Toast** (Notifications)
+* Secure JWT-based user authentication
+* Persistent login across browser sessions
+* Browse products by category
+* Search and filter products
+* Add, update, and remove items from cart
+* Wishlist support
+* User profile management
+* Save delivery addresses
+* Place orders securely
+* Amazon-style order tracking timeline
+* Order history dashboard
+* Mobile-friendly responsive interface
 
-### Backend
-- **Node.js & Express 5**
-- **MongoDB & Mongoose**
-- **JSON Web Tokens (JWT)** & **Bcrypt.js** (Auth & Security)
-- **Stripe** (Payment Processing)
-- **Cloudinary & Multer** (Image Handling)
+### 🛍️ Seller Features
 
-## 🚀 Getting Started
+* Dedicated seller authentication
+* Seller dashboard
+* Add new products
+* Edit existing products
+* Delete products
+* Upload product images
+* Inventory management
+* View and manage customer orders
+* Track sales performance
 
-### Prerequisites
-- Node.js installed on your machine
-- MongoDB instance (Atlas or local)
-- Cloudinary Account
-- Stripe Account
+### 💳 Payment System
 
-### Installation
+* Secure Stripe Checkout integration
+* Online payment support
+* Order confirmation after successful payment
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd greencart
-   ```
+### 🖼️ Image Management
 
-2. **Install Backend Dependencies**
-   ```bash
-   cd server
-   npm install
-   ```
+* Cloudinary image hosting
+* Multer middleware for image uploads
+* Optimized product image delivery
 
-3. **Install Frontend Dependencies**
-   ```bash
-   cd ../client
-   npm install
-   ```
+### 📱 Responsive UI
 
-### ⚙️ Environment Variables
+* Fully responsive design
+* Desktop, tablet, and mobile support
+* Clean and modern shopping experience
+* Built using Tailwind CSS
 
-Create a `.env` file in the `server` directory and add the following required variables:
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+
+* React 19
+* Vite
+* Tailwind CSS 4
+* React Router v7
+* Axios
+* React Hot Toast
+
+## Backend
+
+* Node.js
+* Express.js 5
+* MongoDB
+* Mongoose
+* JSON Web Token (JWT)
+* Bcrypt.js
+
+## Third-Party Services
+
+* Stripe
+* Cloudinary
+* Multer
+
+---
+
+# 📂 Project Structure
+
+```text
+GreenCart/
+│
+├── client/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── server/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── uploads/
+│   ├── package.json
+│   └── server.js
+│
+└── README.md
+```
+
+---
+
+# ⚙️ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/your-username/greencart.git
+
+cd greencart
+```
+
+---
+
+## Install Backend Dependencies
+
+```bash
+cd server
+
+npm install
+```
+
+---
+
+## Install Frontend Dependencies
+
+```bash
+cd ../client
+
+npm install
+```
+
+---
+
+# 🔐 Environment Variables
+
+## Server (.env)
 
 ```env
 PORT=5000
+
 MONGODB_URI=your_mongodb_connection_string
+
 JWT_SECRET=your_jwt_secret
 
-# Cloudinary Setup
 CLOUDINARY_CLOUD_NAME=your_cloud_name
+
 CLOUDINARY_API_KEY=your_api_key
+
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Stripe Setup
 STRIPE_SECRET_KEY=your_stripe_secret_key
 ```
 
-Create a `.env` file in the `client` directory for the frontend URL:
+---
+
+## Client (.env)
+
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-### 🏃‍♂️ Running the Application Locally
+---
 
-1. **Start the Backend Server**
-   ```bash
-   cd server
-   npm run server
-   ```
-   *(The backend server will run with nodemon)*
+# ▶️ Running the Project
 
-2. **Start the Frontend Development Server**
-   ```bash
-   cd client
-   npm run dev
-   ```
+## Start Backend
 
-## 🌐 Deployment
+```bash
+cd server
 
-This application is ready to be deployed on platforms like **Vercel**. 
-When deploying, make sure to:
-- Add all required environment variables in your deployment platform's dashboard.
-- Update any CORS configurations if necessary.
-- Ensure the build command `npm run build` is executed for the frontend.
+npm run server
+```
+
+---
+
+## Start Frontend
+
+```bash
+cd client
+
+npm run dev
+```
+
+---
+
+# 🌍 Deployment
+
+GreenCart can be deployed on platforms such as **Vercel**, **Render**, or **Railway**.
+
+Before deployment:
+
+* Configure all environment variables.
+* Update CORS settings for production.
+* Build the frontend using:
+
+```bash
+npm run build
+```
+
+---
+
+# 🔒 Security
+
+* JWT Authentication
+* Password hashing using Bcrypt
+* Protected API routes
+* Secure payment gateway with Stripe
+* Environment variable protection
+
+---
+
+# 📸 Screenshots
+
+Add screenshots of the following pages:
+
+* Home Page
+* Product Listing
+* Product Details
+* Shopping Cart
+* Checkout
+* User Dashboard
+* Order Tracking
+* Seller Dashboard
+* Admin Product Management
+
+---
+
+# 🎯 Future Improvements
+
+* Product reviews and ratings
+* AI-based product recommendations
+* Coupon and discount system
+* Email notifications
+* Live order tracking
+* Multi-vendor marketplace
+* Dark mode
+* Progressive Web App (PWA)
+* Inventory analytics dashboard
+* Admin panel with detailed reports
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes.
+4. Push your branch.
+5. Open a Pull Request.
+
+---
+
+# 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+**K. Rohith Kantubhuktha**
+
+Frontend Developer | MERN Stack Developer | React Developer
+
+If you found this project useful, consider giving it a ⭐ on GitHub.

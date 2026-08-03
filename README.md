@@ -269,7 +269,7 @@ This project is licensed under the MIT License.
 
 # 👨‍💻 Author
 
-**K. Rohith Kantubhuktha**
+** Rohith Kantubhuktha **
 
 Frontend Developer | MERN Stack Developer | React Developer
 
